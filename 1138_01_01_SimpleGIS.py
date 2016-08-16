@@ -62,7 +62,9 @@ def convert(point):
 t.up()
 first_pixel = None
 for point in state[POINTS]:
+  print(point)
   pixel = convert(point)
+  print(pixel)
   if not first_pixel:
     first_pixel = pixel
   t.goto(pixel)

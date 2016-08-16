@@ -11,8 +11,8 @@ cities.append(['DENVER', [-104.98,39.74],634265])
 cities.append(['BOULDER', [-105.27,40.02],98889])
 cities.append(['DENVER', [-107.88,37.28],17069])
 
-map_width = 400
-map_height = 300
+map_width = 800
+map_height = 500
 
 minx=180
 maxx=-180
@@ -22,6 +22,7 @@ maxy=-90
 for x,y in state[POINTS]:
     if x<minx:minx=x
     elif x>maxx:maxx=x
+    if y<miny:miny=y
     elif y>maxy:maxy=y
 
 dist_x=maxx-minx
@@ -42,7 +43,9 @@ def convert(point):
 t.up()
 first_pixel=None
 for point in state[POINTS]:
+    print(point)
     pixel=convert(point)
+    print(pixel)
     if not first_pixel:
         first_pixel=pixel
     t.goto(pixel)
@@ -53,5 +56,24 @@ t.goto([0,0])
 t.write(state[NAME],
 align="center",
 font=("Arial",16,"bold"))
+
+for city in cities:
+    pixel=convert(city[POINTS])
+    t.up()
+    t.goto(pixel)
+    t.dot(10)
+    t.write(city[NAME] + ",Pop.:" + str(city[POP]), align="left")
+    t.up
+
+
+biggest_city=max(cities, key=lambda city:city[POP])
+t.goto(0,-200)
+t.write("The biggest city is:" + biggest_city[NAME])
+western_city = min(cities, key=lambda city:city[POINTS])
+
+t.goto(0,-220)
+t.write("The western-most city is: " + western_city[NAME])
+
+t.pen(shown=False)
 
 t.done()
