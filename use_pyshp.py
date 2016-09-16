@@ -7,3 +7,4 @@ for feature in records:
     rec=feature.record
     #print(point[0],point[1],rec)
     print(point,rec)
+
