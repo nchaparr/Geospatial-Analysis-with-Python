@@ -8,6 +8,41 @@ except:
     from PIL import Image
     from PIL import ImageDraw
 import shapefile
+import geopandas
+import matplotlib.pyplot as plt
+import pymysql
+
+
+conn=pymysql.connect(host='localhost',port=3306, user='nchaparr',passwd='Mu11igans!',db='mysql')
+cur=conn.cursor()
+cur.execute("DROP DATABASE IF EXISTS spatial_db")
+cur.execute("CREATE DATABASE spatial.db")
+cur.close()
+conn.close()
+
+conn=pymysql.connect(host='localhost', port=3306, user='nchaparr',passwd='',db='spatial_db')
+cur=conn.cursor()
+cur.execute("CREATE TABLE PLACES (id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(50) NOT NULL, location Geometry NOT NULL)")
+cur.execute("INSERT INTO PLACES (name, location) VALUES ('NEW ORLEANS',GeomFromText('POINT(30.03 90.03)'))")
+cur.execute("INSERT INTO PLACES (name, location) VALUES ('MEMPHIS', GeomFromText('POINT(35.05 90.00)'))")
+
+p1,p2 = [p[0] for p in cur.fetchall()]
+cur.execute("SET @p1=ST_GeomFromText('{}')".format(p1))
+cur.execute("SET @p2=ST_GeomFromText('{}')".format(p2))
+cur.execute("SELECT ST_Distance(@p1,@p2")
+d=float(cur.fetchone()[0])
+
+print(d)
+#print("{:.2f} miles from New Orleans to Memphis".format(d*70))
+
+cur.close()
+conn.close()
+
+gdf=geopandas.GeoDataFrame
+census=gdf.from_file("GIS_CensusTract_poly.shp")
+census.plot()
+plt.show()
+
 
 r=shapefile.Reader("hancock.shp")
 xdist=r.bbox[2]-r.bbox[0]
