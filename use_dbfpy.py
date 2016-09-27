@@ -13,14 +13,14 @@ import matplotlib.pyplot as plt
 import pymysql
 
 
-conn=pymysql.connect(host='localhost',port=3306, user='nchaparr',passwd='Mu11igans!',db='mysql')
+conn=pymysql.connect(host='localhost',port=3306, user='wpuser',passwd='foobar',db='spatial_db')
 cur=conn.cursor()
 cur.execute("DROP DATABASE IF EXISTS spatial_db")
-cur.execute("CREATE DATABASE spatial.db")
+cur.execute("CREATE DATABASE spatial_db")
 cur.close()
 conn.close()
 
-conn=pymysql.connect(host='localhost', port=3306, user='nchaparr',passwd='',db='spatial_db')
+conn=pymysql.connect(host='localhost', port=3306, user='wpuser',passwd='foobar',db='spatial_db')
 cur=conn.cursor()
 cur.execute("CREATE TABLE PLACES (id int NOT NULL AUTO_INCREMENT PRIMARY KEY, Name varchar(50) NOT NULL, location Geometry NOT NULL)")
 cur.execute("INSERT INTO PLACES (name, location) VALUES ('NEW ORLEANS',GeomFromText('POINT(30.03 90.03)'))")
